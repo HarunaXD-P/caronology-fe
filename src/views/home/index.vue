@@ -5,6 +5,24 @@
     </div>
 </template>
 
+<script>
+//import { utils } from '../../common/utils'
+import { getTest } from '@/api/test.js'
+export default {
+    data() {
+        return {
+
+        }
+    },
+    mounted() {
+        getTest().then(res=>{
+            console.log(res)
+        })
+        console.log(process.env)
+    }
+}
+</script>
+
 <style scoped lang="less">
 .home-page {
     height: 100px;
