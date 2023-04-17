@@ -1,6 +1,6 @@
 <template>
     <div class="home-page">
-        this is the home page
+        this is the home page, the first merge
         <div class="home-page-child"> test</div>
     </div>
 </template>
