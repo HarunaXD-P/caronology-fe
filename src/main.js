@@ -3,8 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import { Button, Select, Message } from 'element-ui';
 
 Vue.config.productionTip = false
+Vue.prototype.$message = Message;
 
 import less from 'less'
 Vue.use(less)
