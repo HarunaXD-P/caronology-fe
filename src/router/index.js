@@ -4,6 +4,7 @@ import Home from '@/views/home'
 import Jobs from '@/views/jobs'
 import Migration from '@/views/Migration'
 import Works from '@/views/works'
+import Upload from '@/views/upload'
 
 
 Vue.use(Router)
@@ -30,6 +31,11 @@ export default new Router({
       path: '/works',
       name: 'works',
       component: Works
+    },
+    {
+      path: '/upload',
+      name: 'upload',
+      component: Upload
     }
   ]
 })

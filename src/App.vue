@@ -8,6 +8,7 @@
 export default {
   name: 'App'
 }
+
 </script>
 
 <style>
@@ -25,5 +26,8 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
+}
+* {
+  box-sizing: border-box;
 }
 </style>
