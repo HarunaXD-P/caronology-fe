@@ -15,7 +15,7 @@ export default {
         }
     },
     mounted() {
-        getTest().then(res=>{
+        getTest().then(res => {
             console.log(res)
         })
         console.log(process.env)
@@ -27,6 +27,7 @@ export default {
 .home-page {
     height: 100px;
     background-color: red;
+
     .home-page-child {
         background-color: blue;
     }
