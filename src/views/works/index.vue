@@ -1,24 +1,40 @@
 <template>
-    <div>
-        这是著作的路由页面
-    </div>
-</template>
-
-<template>
     <div class="Echarts">
       <div id="main" style="width: 600px;height:400px;"></div>
     </div>
+    <!--
+    <input type="file" name="csvfile" ref="csvData" />
+    <input type="button" @click="csv()" value="JS转换"/>
+    -->
 </template>
   
 <script>
-let Echarts = require('echarts/lib/echarts'); //基础实例 注意不要使用import
-require('echarts/lib/chart/bar'); //按需引入 bar = 柱状图
+
+import {csv2arr} from '@/api/csv.js'
+
+//let Echarts = require('echarts/lib/echarts'); //基础实例 注意不要使用import
+//require('echarts/lib/chart/bar'); //按需引入 bar = 柱状图
+import * as Echarts from 'echarts'
+//import Papa from 'papaparse'
+//Papa.parse(example.csv,example)
+
+import westeros from 'echarts/theme/westeros'
+import essos from 'echarts/theme/essos'
+
 export default {
     name: 'Echarts',
     methods:{
+    
+    csv() {
+        csv2arr('./example.csv').then((res)=>{
+            console.log('我的数据', res)
+        });
+        var result= csv2arr('./example.csv');
+    },
+
     myEcharts(){
         // 基于准备好的dom，初始化echarts实例
-        var myChart = Echarts.init(document.getElementById('main'));
+        var myChart = Echarts.init(document.getElementById('main'), 'essos', {renderer: 'svg'});
 
         // 指定图表的配置项和数据
         var option = {
@@ -44,6 +60,6 @@ export default {
         myChart.setOption(option);
     }
 },
-mounted() { this.myEcharts(); }
+mounted() { this.csv(); this.myEcharts(); }
 }
 </script>
