@@ -3,7 +3,7 @@
     <div class="placeholder" v-if="event_id == ''">请在左侧选择事件进行标注</div>
     <div v-else>
       <div class="proof-menu">
-        <div class="delete-button button">删除</div>
+        <div class="delete-button button" @click="deleteEvent">删除</div>
         <div class="save-button button" @click="editing_event = true" v-if="!editing_event">修改事件</div>
         <div class="save-button button" @click="uploadEditEvent" v-else>上传</div>
         <div class="proof-menu-placeholder"></div>
@@ -128,6 +128,15 @@ export default {
       }).then(res => {
         this.editing_event = false
         this.getEventProof()
+      })
+    },
+    deleteEvent() {
+      deleteRecord({}, {
+        type: 2,
+        target_id: this.event_id
+      }).then(res=>{
+        this.$emit('need_refresh')
+        this.event_id = ''
       })
     }
   }

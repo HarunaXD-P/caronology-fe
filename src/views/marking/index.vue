@@ -15,15 +15,11 @@
                                     @click="showEventDetail(event.eventId)">
                                     {{ event.eventText }}
                                 </div>
-                                <div class="add-event-button event-item">
+                                <div class="add-event-button event-item" @click="addEvent(year)">
                                     添加事件
                                 </div>
                             </div>
 
-                        </el-collapse-item>
-                        <el-collapse-item title="反馈 Feedback" name="2">
-                            <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-                            <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
                         </el-collapse-item>
                     </el-collapse>
                 </div>
@@ -31,7 +27,9 @@
 
         </div>
         <div class="right-side">
-            <Proof :event="editing_event" :key="editing_event"></Proof>
+            <Proof :event="editing_event" :key="editing_event" @need_refresh="getYearEvent" v-if="!creating_event"></Proof>
+            <NewEvent v-else :year="creating_event_year" @need_refresh="getYearEvent"
+                @add_event_cancel="handleAddEventCancel" @add_event_finish="handleAddEventFinish"></NewEvent>
         </div>
     </div>
 </template>
@@ -41,9 +39,11 @@ import { utils } from '@/common/utils'
 import { getYearEventList } from '@/api/marking'
 import { uploadFile } from '@/api/upload.js'
 import Proof from './components/proof.vue'
+import NewEvent from './components/newEvent.vue'
 export default {
     components: {
-        Proof
+        Proof,
+        NewEvent
     },
     data() {
         return {
@@ -52,6 +52,8 @@ export default {
             year_event_list: undefined,
             active_year: '',
             editing_event: '',
+            creating_event: false,
+            creating_event_year: undefined,
         }
     },
     created() {
@@ -72,8 +74,22 @@ export default {
         },
         handleYearChange(e) {
         },
+        addEvent(year) {
+            this.creating_event_year = year
+            this.creating_event = true
+        },
         showEventDetail(event_id) {
             this.editing_event = event_id
+        },
+        handleAddEventCancel() {
+            this.creating_event = false
+            this.creating_event_year = {}
+        },
+        handleAddEventFinish(id) {
+            this.creating_event = false
+            this.creating_event_year = {}
+            this.getYearEvent()
+            this.editing_event = id
         }
     }
 }
