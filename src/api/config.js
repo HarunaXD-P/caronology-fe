@@ -2,7 +2,6 @@ import axios from 'axios'
 import { utils } from '@/common/utils'
 
 const __DEFAULT_PARAMS__ = {
-	web_version: '1.0.0',
 }
 
 window.SUPPORT_WEBP = undefined
@@ -11,7 +10,6 @@ export function axiosGetHandler(url, args = {}, apps = {}) {
 	if (window.SUPPORT_WEBP == undefined) {
 		return Promise.all([httpRequest('GET', url, params), utils.webpFormat()]).then(res_list => res_list[0])
 	} else {
-		console.log('success get')
 		return httpRequest('GET', url, params)
 	}
 }
