@@ -5,52 +5,55 @@
         </div>
         <div class="right-side">
             <div class="upload-area">
-            <input class="upload-select-button" id="fileInput" type="file" ref="file" accept=".pdf,.txt" multiple @change="selectFile" />
-            <div class="upload-submit-button">
-                <button  @click="handleUploadFile">SUBMIT</button>
-            </div>
+                <input class="upload-select-button" id="fileInput" type="file" ref="file" accept=".pdf,.txt" multiple
+                    @change="selectFile" />
+                <div class="upload-submit-button">
+                    <button @click="handleUploadFile">SUBMIT</button>
+                </div>
             </div>
             <div class="upload-list-area">
                 <div class="upload-file-title">已上传文件列表</div>
                 <div class="scroll-area">
-                    <div class="uploaded-file-item" @click="handleFileClick">这是一个文件</div>
+                    <div class="uploaded-file-item" v-for="file in fileList" :key="file.fileId"
+                        @click="handleFileClick(file)">{{ file.fileName }}</div>
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 
 <script>
 //import { utils } from '../../common/utils'
 import { getTest } from '@/api/test.js'
-import { uploadFile } from '@/api/upload.js'
+import { uploadFile, getFileList } from '@/api/upload.js'
 export default {
     data() {
         return {
-            file: ''
+            file: '',
+            fileList: []
         }
     },
+    created() {
+        this.getFileList()
+    },
     mounted() {
-        getTest().then(res => {
-            console.log(res)
-        })
-        console.log(process.env)
     },
     methods: {
         handleUploadFile() {
-            if(this.file == '') {
+            if (this.file == '') {
                 this.$message.warning('请上传文件')
             } else {
                 let formData = new FormData()
                 formData.append('file', this.file)
-                uploadFile({}, formData).then(res=> {
-                    if(res.data.status == 'ok'){
+                uploadFile({}, formData).then(res => {
+                    if (res.data.status == 'ok') {
                         this.$message({
                             message: "文件上传成功",
-                            type:'success'
+                            type: 'success'
                         })
                         this.$refs.file.value = ''
+                        this.getFileList()
                     }
                 })
             }
@@ -58,11 +61,20 @@ export default {
         selectFile() {
             this.file = this.$refs.file.files[0]
         },
-        handleFileClick() {
+        handleFileClick(file) {
+            let { fileId } = file
             this.$router.push({
                 path: '/marking',
                 query: {
-                    file_id: '0131e6b65fb16a18030c67bcbb7f3378'
+                    file_id: fileId
+                }
+            })
+        },
+        getFileList() {
+            getFileList().then(res => {
+                console.log(res.data)
+                if (res.data.status == 'ok') {
+                    this.fileList = res.data.data
                 }
             })
         }
@@ -84,6 +96,7 @@ export default {
         flex: 1;
         display: flex;
         justify-content: center;
+
         .upload-image {
             max-width: 100%;
             max-height: 100%;
@@ -91,11 +104,13 @@ export default {
             margin: auto;
         }
     }
+
     .right-side {
         flex: 1;
         display: flex;
         align-items: center;
         flex-direction: column;
+
         .upload-area {
             flex-shrink: 0;
             height: 300px;
@@ -103,10 +118,12 @@ export default {
             flex-direction: column;
             align-items: flex-start;
             justify-content: center;
+
             .upload-submit-button {
                 margin-top: 40px;
             }
         }
+
         .upload-list-area {
             background-color: #e3e4e5;
             flex: 1;
@@ -115,15 +132,18 @@ export default {
             display: flex;
             flex-flow: column;
             flex-direction: column;
+
             .upload-file-title {
                 height: 50px;
                 flex-shrink: 0;
             }
+
             .scroll-area {
                 height: 0;
                 width: 100%;
                 flex: 1;
                 overflow-y: scroll;
+
                 .uploaded-file-item {
                     margin-top: 5px;
                     height: 50px;
@@ -132,6 +152,6 @@ export default {
             }
         }
     }
-    
+
 }
 </style>
