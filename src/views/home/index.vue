@@ -27,14 +27,7 @@ export default {
         },
         post_api() {
             postTest({},{
-                type: 0,
-                target_info: {
-                    proofId: '230',
-                    proofInfo: JSON.stringify({target_site: 'beijing'}),
-                    proofText: 'this is proof1 of 5',
-                    proofType: '1',
-                    eventId: '5',
-                }
+                
             }).then(res=> {
                 this.test_result = JSON.stringify(res)
             })

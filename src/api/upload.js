@@ -8,3 +8,9 @@ export function uploadFile (args = {}, form) {
     console.log(url)
     return axiosPostHandler(url, args, form)
 }
+
+export function getFileList(args) {
+    let url = BASE_API + '/input/get_file_list'
+    console.log(url)
+    return axiosGetHandler(url, args)
+}

@@ -2,7 +2,6 @@ import axios from 'axios'
 import { utils } from '@/common/utils'
 
 const __DEFAULT_PARAMS__ = {
-	web_version: '1.0.0',
 }
 
 window.SUPPORT_WEBP = undefined
