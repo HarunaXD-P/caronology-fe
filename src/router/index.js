@@ -5,6 +5,7 @@ import Jobs from '@/views/jobs'
 import Migration from '@/views/Migration'
 import Works from '@/views/works'
 import Upload from '@/views/upload'
+import Geo from '@/views/geo'
 import Marking from '@/views/marking'
 
 
@@ -37,6 +38,11 @@ export default new Router({
       path: '/upload',
       name: 'upload',
       component: Upload
+    },
+    {
+      path: '/geo',
+      name: 'geo',
+      component: Geo
     },
     {
       path: '/marking',
