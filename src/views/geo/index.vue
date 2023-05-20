@@ -1,9 +1,14 @@
 <template>
-	<div class="container" id="container" style="z-index: 1"></div>
+	<div class="geo-page">
+		<div class="container" id="container" style="z-index: 1"></div>
+		<button @click="addZoom(1.4)">1111</button>
+		<button @click="addZoom(0.8)">2222</button>
+	</div>
 </template>
 <script>
 import * as echarts from 'echarts';
-import chinaMap from './map/china.json'
+import chinaMapJSON from './map/china.json'
+import zhejiangMapJSON from './map/zhejiang.json'
 export default {
 	data() {
 		return {
@@ -11,21 +16,22 @@ export default {
 		}
 	},
 	created() {
-		echarts.registerMap("china", { geoJSON: chinaMap });
+		echarts.registerMap("china", { geoJSON: chinaMapJSON });
+		echarts.registerMap("zhejiang", { geoJSON: zhejiangMapJSON })
 	},
 	mounted() {
 		this.$nextTick(_ => {
-			this.initMapInfo()
-			this.chinaMap.on('click',(e)=>{
-				console.log(e)
-			})
+			// this.initMapInfo()
+			// this.chinaMap.on('click', (e) => {
+			// 	console.log(e.name)
+			// })
 		})
 	},
 	methods: {
 		initMapInfo() {
 			// 地图数据
 			var chinaGeoCoordMap = {
-				黑龙江: [127.9688, 45.368],
+				黑龙江: [144.9688, 45.368],
 				内蒙古: [110.3467, 41.4899],
 				吉林: [125.8154, 44.2584],
 				北京市: [116.4551, 40.2539],
@@ -228,7 +234,6 @@ export default {
 			var convertData = function (data) {
 				var res = []
 				for (var i = 0; i < data.length; i++) {
-					console.log(data[i])
 					var dataItem = data[i]
 					var fromCoord = chinaGeoCoordMap[dataItem[0].name]
 					var toCoord = [108.384366, 30.439702] //中心点地理坐标
@@ -248,34 +253,9 @@ export default {
 				}
 				return res
 			}
-			var series = []
-				;[[formdata, chinaDatas]].forEach(function (item, i) {
-					console.log(item)
+			var series = [];
+			[[formdata, chinaDatas]].forEach(function (item, i) {
 					series.push(
-						{
-							type: 'lines',
-							coordinateSystem: 'geo',
-							zlevel: 2,
-							effect: {
-								show: true,
-								period: 4, //箭头指向速度，值越小速度越快
-								trailLength: 0, //特效尾迹长度[0,1]值越大，尾迹越长重
-								symbol: 'arrow', //箭头图标
-								symbolSize: 5, //图标大小
-								color: '#fcdd6e', // 图标颜色
-							},
-							lineStyle: {
-								normal: {
-									show: true,
-									width: 1, //尾迹线条宽度
-									opacity: 1, //尾迹线条透明度
-									curveness: 0.3, //尾迹线条曲直度
-									color: '#fcdd6e', // 飞线颜色
-								},
-								color: '#fcdd6e',
-							},
-							data: convertData(item[1]),
-						},
 						{
 							type: 'effectScatter',
 							coordinateSystem: 'geo',
@@ -290,11 +270,11 @@ export default {
 							label: {
 								normal: {
 									show: false,
-									position: 'right', //显示位置
-									offset: [5, 0], //偏移设置
+									position: 'left', //显示位置
+									offset: [-5, 0], //偏移设置
 									formatter: function (params) {
 										//圆环显示文字
-										return params.data.name
+										return params.data.name + '1'
 									},
 									fontSize: 13,
 								},
@@ -331,17 +311,17 @@ export default {
 								period: 4,
 								brushType: 'stroke',
 								scale: 4,
-								color: '#38ff85',
+								color: 'red',
 							},
 							label: {
 								normal: {
 									show: false,
-									position: 'right',
+									position: 'left',
 									//offset:[5, 0],
-									color: '#38ff85',
+									color: 'red',
 									formatter: '{b}',
 									textStyle: {
-										color: '#38ff85',
+										color: 'red',
 									},
 								},
 								emphasis: {
@@ -392,6 +372,10 @@ export default {
 				geo: {
 					map: 'china',
 					zoom: 1.2,
+					scaleLimit: {
+						min: 0.7,
+						max: 2.5
+					},
 					label: {
 						normal: {
 							show: false,
@@ -422,6 +406,15 @@ export default {
 
 			this.chinaMap.setOption(option)
 		},
+		addZoom(a) {
+			let op = {
+				geo: {
+					map: 'zhejiang',
+					zoom: a
+				}
+			}
+			this.chinaMap.setOption(op)
+		}
 	}
 }
 </script>
@@ -429,7 +422,10 @@ export default {
 .geo-page {
 	width: 100vw;
 	height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
+
 .container {
 	width: 1000px;
 	height: 1000px;
